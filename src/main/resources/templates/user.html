@@ -1,11 +1,126 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .info-row {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: bold;
+            color: #666;
+        }
+        .value {
+            color: #333;
+        }
+        .roles {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .role {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+        .admin-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .admin-link:hover {
+            background-color: #218838;
+        }
+        .logout-button {
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+    </style>
 </head>
 <body>
-<h1>User, welcome spring boot security page!</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Личный кабинет</h1>
+            <form th:action="@{/logout}" method="post" class="action-form">
+                <button type="submit" class="logout-button">Выйти</button>
+            </form>
+        </div>
 
+        <div class="user-info">
+            <div class="info-row">
+                <div class="label">ID:</div>
+                <div class="value" th:text="${user.id}"></div>
+            </div>
+            <div class="info-row">
+                <div class="label">Имя:</div>
+                <div class="value" th:text="${user.name}"></div>
+            </div>
+            <div class="info-row">
+                <div class="label">Логин:</div>
+                <div class="value" th:text="${user.username}"></div>
+            </div>
+            <div class="info-row">
+                <div class="label">Email:</div>
+                <div class="value" th:text="${user.email}"></div>
+            </div>
+            <div class="info-row">
+                <div class="label">Возраст:</div>
+                <div class="value" th:text="${user.age}"></div>
+            </div>
+            <div class="info-row">
+                <div class="label">Роли:</div>
+                <div class="roles">
+                    <span th:each="role : ${user.roles}" class="role" th:text="${role.name}"></span>
+                </div>
+            </div>
 
+            <div sec:authorize="hasRole('ADMIN')">
+                <a th:href="@{/admin}" class="admin-link">Перейти в панель администратора</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
