@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -16,11 +17,13 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> findAll() {
         return entityManager.createQuery("from User", User.class).getResultList();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findById(Long id) {
         return entityManager.find(User.class, id);
     }
@@ -47,6 +50,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
         try {
             return entityManager.createQuery(
@@ -54,7 +58,7 @@ public class UserDaoImpl implements UserDao {
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException e) {
-            return null;  // или бросить UsernameNotFoundException
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
 }

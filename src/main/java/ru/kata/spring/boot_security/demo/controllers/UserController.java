@@ -22,17 +22,13 @@ public class UserController {
 
     @GetMapping
     public String showUserPage(Model model, Authentication authentication) {
-        // Получаем текущего аутентифицированного пользователя
-        User currentUser = (User) authentication.getPrincipal();
 
-        // Для админа может быть передан ID пользователя через параметр
-        // Если нет - показываем данные текущего пользователя
+        User currentUser = (User) authentication.getPrincipal();
         Long userId = currentUser.getId();
 
-        // Получаем актуальные данные пользователя из БД
         User user = userService.getUserById(userId);
 
         model.addAttribute("user", user);
-        return "user"; // имя шаблона user.html
+        return "user";
     }
 }
