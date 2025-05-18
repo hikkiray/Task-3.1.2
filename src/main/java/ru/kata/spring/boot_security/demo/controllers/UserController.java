@@ -26,7 +26,7 @@ public class UserController {
         User currentUser = (User) authentication.getPrincipal();
         Long userId = currentUser.getId();
 
-        User user = userService.getUserById(userId);
+        User user = userService.findUserById(userId);
 
         model.addAttribute("user", user);
         return "user";

@@ -33,7 +33,7 @@ public class AdminController {
 
     @GetMapping
     public String adminPanel(Model model) {
-        model.addAttribute("users", userService.getAllUsers().stream()
+        model.addAttribute("users", userService.findAllUsers().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList()));
         model.addAttribute("allRoles", roleService.getAllRoles());
@@ -42,7 +42,7 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(@ModelAttribute UserDto userDto) {
-        userService.saveUser(userDto);
+        userService.createUser(userDto);
         return "redirect:/admin";
     }
 

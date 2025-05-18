@@ -36,19 +36,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
+    public List<User> findAllUsers() {
         return userDao.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public User getUserById(Long id) {
+    public User findUserById(Long id) {
         return userDao.findById(id);
     }
 
     @Override
     @Transactional
-    public void saveUser(UserDto userDto) {
+    public void createUser(UserDto userDto) {
         User user = userMapper.toEntity(userDto);
         userDao.save(user);
     }
@@ -61,11 +61,12 @@ public class UserServiceImpl implements UserService {
 
         if (updatedUser.getPassword().isEmpty()) {
             updatedUser.setPassword(existingUser.getPassword());
+        } else {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
         }
 
         userDao.update(updatedUser);
     }
-
 
     @Override
     @Transactional(rollbackFor = Exception.class)
