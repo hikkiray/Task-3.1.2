@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -54,11 +55,12 @@ public class UserDaoImpl implements UserDao {
     public User findByUsername(String username) {
         try {
             return entityManager.createQuery(
-                            "SELECT u FROM User u WHERE u.username = :username", User.class)
+                            "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
         } catch (NoResultException e) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            return null;
         }
     }
+
 }
