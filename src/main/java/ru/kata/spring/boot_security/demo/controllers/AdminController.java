@@ -32,7 +32,7 @@ public class AdminController {
     }
 
     @GetMapping
-    public String adminPanel(Model model) {
+    public String showAdminPanel(Model model) {
         model.addAttribute("users", userService.findAllUsers().stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList()));

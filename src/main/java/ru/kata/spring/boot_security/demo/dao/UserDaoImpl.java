@@ -30,6 +30,19 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public User findByUsername(String username) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            throw new UsernameNotFoundException( "User not found " + username);
+        }
+    }
+
+    @Override
     @Transactional
     public void save(User user) {
         entityManager.persist(user);
@@ -50,17 +63,6 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public User findByUsername(String username) {
-        try {
-            return entityManager.createQuery(
-                            "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username", User.class)
-                    .setParameter("username", username)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
+
 
 }

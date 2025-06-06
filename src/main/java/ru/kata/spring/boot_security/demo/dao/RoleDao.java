@@ -6,5 +6,5 @@ import java.util.List;
 public interface RoleDao {
     Role findById(Long id);
     List<Role> findAll();
-    void save(Role role);
+    void saveRole(Role role);
 }
