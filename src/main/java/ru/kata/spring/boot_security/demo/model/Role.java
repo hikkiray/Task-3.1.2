@@ -15,12 +15,6 @@ public class Role implements GrantedAuthority {
     @Column(unique = true)
     private String name;
 
-    // Реализация GrantedAuthority
-    @Override
-    public String getAuthority() {
-        return name;
-    }
-
     public Role() {}
 
     public Long getId() {
@@ -37,6 +31,12 @@ public class Role implements GrantedAuthority {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    // Реализация GrantedAuthority
+    @Override
+    public String getAuthority() {
+        return name;
     }
 
     @Override
