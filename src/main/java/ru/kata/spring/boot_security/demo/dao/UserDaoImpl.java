@@ -1,5 +1,7 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.Optional;
 @Repository
 public class UserDaoImpl implements UserDao {
 
+    private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -36,7 +39,9 @@ public class UserDaoImpl implements UserDao {
             return entityManager.createQuery(
                             "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.username = :username", User.class)
                     .setParameter("username", username)
-                    .getSingleResult();
+                    .getResultStream()
+                    .findFirst()
+                    .orElse(null);
         } catch (NoResultException e) {
             throw new UsernameNotFoundException( "User not found " + username);
         }
